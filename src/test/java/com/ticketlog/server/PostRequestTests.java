@@ -1,6 +1,7 @@
 package com.ticketlog.server;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,17 +43,15 @@ public class PostRequestTests {
         my_obj.put("idEstado", "SC");
         my_obj.put("nome", "Joinville");
         my_obj.put("populacao", 590400);
-        my_obj.put("custoCidadeUs", 1.0);
-
 
         MvcResult result = mockMvc
-                .perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON)
-                        .content(my_obj.toString())).andExpect(status().isOk())
-                .andReturn();
+                .perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(status().isOk()).andReturn();
 
         Cidade response = objectMapper.readValue(result.getResponse().getContentAsString(), Cidade.class);
         assertThat(response.getNome()).isEqualTo("Joinville");
         assertThat(response.getPopulacao()).isEqualTo(590400);
         assertThat(response.getIdEstado().toString()).isEqualTo("SC");
+        assertThat(response.getCustoCidadeUs()).isEqualTo(64.6792E6, within(100.0));
     }
 }

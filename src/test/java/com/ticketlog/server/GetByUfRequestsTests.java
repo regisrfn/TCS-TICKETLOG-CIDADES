@@ -54,7 +54,6 @@ public class GetByUfRequestsTests {
         my_obj.put("idEstado", "SC");
         my_obj.put("nome", "Joinville");
         my_obj.put("populacao", 590400);
-        my_obj.put("custoCidadeUs", 1.0);
 
         result = mockMvc
                 .perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
@@ -67,7 +66,6 @@ public class GetByUfRequestsTests {
         my_obj.put("idEstado", "SC");
         my_obj.put("nome", "Florianópolis");
         my_obj.put("populacao", 508826);
-        my_obj.put("custoCidadeUs", 2.0);
 
         result = mockMvc
                 .perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))

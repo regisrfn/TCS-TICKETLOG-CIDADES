@@ -40,7 +40,7 @@ public class Cidade {
 
     public Cidade(){
         setId(UUID.randomUUID());
-
+        setCustoCidadeUs(0.0);
     }
 
     public void setIdEstado(String id) {

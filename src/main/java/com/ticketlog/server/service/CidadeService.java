@@ -7,23 +7,36 @@ import com.ticketlog.server.dao.CidadeDao;
 import com.ticketlog.server.exception.ApiRequestException;
 import com.ticketlog.server.model.Cidade;
 import com.ticketlog.server.model.Cidade.UF;
+import com.ticketlog.server.model.PCusto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class CidadeService {
 
     private CidadeDao cidadeDao;
+    private RestTemplate restTemplate;
+    private Dotenv dotenv;
+    private String apiCusto;
+    private String custoId = "95d1421a-4071-4a9b-b3d3-603865c89097";
 
     @Autowired
-    public CidadeService(CidadeDao cidadeDao) {
+    public CidadeService(CidadeDao cidadeDao, RestTemplate restTemplate, Dotenv dotenv) {
+        this.dotenv = dotenv;
         this.cidadeDao = cidadeDao;
+        this.restTemplate = restTemplate;
+        this.apiCusto = this.dotenv.get("API_CUSTO_URL");
     }
 
     public Cidade saveCidade(Cidade cidade) {
         try {
+            Double custo = calcCusto(cidade);
+            cidade.setCustoCidadeUs(custo);
             return cidadeDao.saveOrUpdateCidade(cidade);
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,6 +92,23 @@ public class CidadeService {
         }
     }
 
+    private Double calcCusto(Cidade cidade) {
+        try {
+            PCusto response = restTemplate.getForObject(this.apiCusto + "/get/" + this.custoId, PCusto.class);
+            long corte = response.getValorCorte();
+            double desconto = response.getDesconto();
+            double custoPorPessoa = response.getCustoPorPessoa();
 
-    
+            if (cidade.getPopulacao() <= corte)
+                return custoPorPessoa * cidade.getPopulacao();
+
+            return corte * custoPorPessoa + (cidade.getPopulacao() - corte) * custoPorPessoa * (1 - desconto / 100);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Não foi possivel obter os parametros de custo");
+        }
+
+    }
+
 }
