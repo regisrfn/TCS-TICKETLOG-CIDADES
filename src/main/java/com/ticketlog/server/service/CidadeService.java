@@ -24,7 +24,7 @@ public class CidadeService {
 
     public Cidade saveCidade(Cidade cidade) {
         try {
-            return cidadeDao.insertCidade(cidade);
+            return cidadeDao.saveOrUpdateCidade(cidade);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiRequestException("Cidade não pode ser salva", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,18 +65,6 @@ public class CidadeService {
             return ok;
         } catch (IllegalArgumentException e) {
             throw new ApiRequestException("Formato de id invalido", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    public Cidade updateCidade(String id, Cidade cidade) {
-        try {
-            UUID cidadeId = UUID.fromString(id.toUpperCase());
-            return cidadeDao.updateCidade(cidadeId, cidade);
-        } catch (IllegalArgumentException e) {
-            throw new ApiRequestException("Formato de id invalido", HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ApiRequestException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -7,7 +7,7 @@ import com.ticketlog.server.model.Cidade;
 import com.ticketlog.server.model.Cidade.UF;
 
 public interface CidadeDao {
-    Cidade insertCidade(Cidade Cidade);
+    Cidade saveOrUpdateCidade(Cidade Cidade);
 
     boolean deleteCidadeById(UUID id);
 
@@ -15,7 +15,5 @@ public interface CidadeDao {
 
     List<Cidade> getByUF(UF uf);
 
-    Cidade getCidade(UUID id);
-
-    Cidade updateCidade(UUID id, Cidade cidade);    
+    Cidade getCidade(UUID id);   
 }

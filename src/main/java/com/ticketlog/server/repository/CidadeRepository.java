@@ -24,7 +24,7 @@ public class CidadeRepository implements CidadeDao {
     }
 
     @Override
-    public Cidade insertCidade(Cidade cidade) {
+    public Cidade saveOrUpdateCidade(Cidade cidade) {
         return jpaDataAccess.save(cidade);
     }
 
@@ -47,12 +47,6 @@ public class CidadeRepository implements CidadeDao {
     @Override
     public Cidade getCidade(UUID id) {
         return jpaDataAccess.findById(id).orElse(null);
-    }
-
-    @Override
-    public Cidade updateCidade(UUID id, Cidade cidade) {
-        cidade.setId(id);
-        return jpaDataAccess.save(cidade);
     }
 
     @Override
