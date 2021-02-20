@@ -49,9 +49,9 @@ public class CidadeService {
         }
     }
 
-    public Cidade getCidadeById(String cidadeUf) {
+    public Cidade getCidadeById(String id) {
         try {
-            UUID cidadeId = UUID.fromString(cidadeUf);
+            UUID cidadeId = UUID.fromString(id);
             Cidade cidade = cidadeDao.getCidade(cidadeId);
             if (cidade == null)
                 throw new ApiRequestException("Cidade não encontrada", HttpStatus.NOT_FOUND);
@@ -63,12 +63,16 @@ public class CidadeService {
 
     }
 
-    public boolean deleteCidadeById(String cidadeUf) {
+    public boolean deleteCidadeById(String id) {
         try {
-            UUID cidadeId = UUID.fromString(cidadeUf);
-            boolean ok = cidadeDao.deleteCidadeById(cidadeId);
-            if (!ok)
+            UUID cidadeId = UUID.fromString(id);
+            Cidade cidade = cidadeDao.getCidade(cidadeId);
+            if (cidade == null)
                 throw new ApiRequestException("Cidade não encontrada", HttpStatus.NOT_FOUND);
+            else if (cidade.getIdEstado().equals("RS"))
+                throw new ApiRequestException("Cidades do Rio Grande do Sul não podem ser removidas",
+                        HttpStatus.FORBIDDEN);
+            boolean ok = cidadeDao.deleteCidadeById(cidadeId);
             return ok;
         } catch (IllegalArgumentException e) {
             throw new ApiRequestException("Formato de id invalido", HttpStatus.BAD_REQUEST);

@@ -56,6 +56,6 @@ public class CidadeController {
     @DeleteMapping("delete/{id}")
     public Map<String, String> deleteCidadeById(@PathVariable String id) {
         cidadeService.deleteCidadeById(id);
-        return Map.of("message", "successfully operation");
+        return Map.of("message", "Operação realizada com sucesso");
     }
 }

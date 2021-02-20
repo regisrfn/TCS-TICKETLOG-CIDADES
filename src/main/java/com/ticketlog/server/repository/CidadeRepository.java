@@ -59,4 +59,10 @@ public class CidadeRepository implements CidadeDao {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public boolean deleteCidadeById(List<Cidade> cList) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
