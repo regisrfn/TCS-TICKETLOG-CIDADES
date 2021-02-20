@@ -34,15 +34,9 @@ public class CidadeService {
     }
 
     public Cidade saveCidade(Cidade cidade) {
-        try {
-            Double custo = calcCusto(cidade);
-            cidade.setCustoCidadeUs(custo);
-            return cidadeDao.saveOrUpdateCidade(cidade);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ApiRequestException("Cidade não pode ser salva", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        Double custo = calcCusto(cidade);
+        cidade.setCustoCidadeUs(custo);
+        return cidadeDao.saveOrUpdateCidade(cidade);
     }
 
     public List<Cidade> getAllCidades() {
@@ -106,7 +100,8 @@ public class CidadeService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Não foi possivel obter os parametros de custo");
+            throw new ApiRequestException("Não foi possivel obter os parametros de custo",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

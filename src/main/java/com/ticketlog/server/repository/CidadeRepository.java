@@ -53,4 +53,10 @@ public class CidadeRepository implements CidadeDao {
     public List<Cidade> getByUF(UF uf) {
         return jpaDataAccess.findByIdEstado(uf);
     }
+
+    @Override
+    public List<Cidade> saveList(List<Cidade> cList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

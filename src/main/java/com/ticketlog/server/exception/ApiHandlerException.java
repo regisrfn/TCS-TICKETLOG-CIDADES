@@ -56,8 +56,8 @@ public class ApiHandlerException {
         String error = (errorMsg.replaceAll(pattern, "$1"));
         Map<String, String> errors = new HashMap<>();
 
-        if (error.equals("uk_cidade_email"))
-            errors.put("customerEmail", "Email not available");
+        if (error.equals("uk_cidade_nome"))
+            errors.put("nome", "Nome da cidade ja existe no estado");
 
         return errors;
     }

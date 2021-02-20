@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "cidades", uniqueConstraints = { @UniqueConstraint(columnNames = "nome", name = "uk_cidade_nome") })
+@Table(name = "cidades", uniqueConstraints = { @UniqueConstraint(columnNames = {"idEstado","nome"}, name = "uk_cidade_nome") })
 public class Cidade {
 
     @Id
@@ -36,6 +36,7 @@ public class Cidade {
     @DecimalMin(value = "0.0")
     private Double custoCidadeUs;
 
+    @NotNull(message = "Campo não deve ser vazio")
     private UF idEstado;
 
     public Cidade(){

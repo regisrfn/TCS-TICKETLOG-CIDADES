@@ -13,6 +13,8 @@ public interface CidadeDao {
 
     List<Cidade> getAll();
 
+    List<Cidade> saveList(List<Cidade> cList);
+
     List<Cidade> getByUF(UF uf);
 
     Cidade getCidade(UUID id);   
