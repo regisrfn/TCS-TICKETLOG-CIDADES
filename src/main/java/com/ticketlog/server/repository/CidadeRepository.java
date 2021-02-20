@@ -10,6 +10,7 @@ import com.ticketlog.server.model.Cidade.UF;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,7 +42,8 @@ public class CidadeRepository implements CidadeDao {
 
     @Override
     public List<Cidade> getAll() {
-        return jpaDataAccess.findAll();
+        Sort sort = Sort.by("nome").descending();
+        return jpaDataAccess.findAll(sort);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class CidadeRepository implements CidadeDao {
 
     @Override
     public List<Cidade> getByUF(UF uf) {
-        return jpaDataAccess.findByIdEstado(uf);
+        return jpaDataAccess.findByIdEstadoOrderByNome(uf);
     }
 
     @Override
