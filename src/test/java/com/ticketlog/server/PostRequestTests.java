@@ -42,7 +42,7 @@ public class PostRequestTests {
     void itShouldSaveCidade() throws Exception {
         JSONObject my_obj = new JSONObject();
 
-        my_obj.put("idEstado", "SC");
+        my_obj.put("uf", "SC");
         my_obj.put("nome", "Joinville");
         my_obj.put("populacao", 590400);
 
@@ -58,7 +58,7 @@ public class PostRequestTests {
 
         my_obj = new JSONObject();
 
-        my_obj.put("idEstado", "PR");
+        my_obj.put("uf", "PR");
         my_obj.put("nome", "Joinville");
         my_obj.put("populacao", 590400);
 
@@ -77,7 +77,7 @@ public class PostRequestTests {
     void itShouldSaveCidade_mesmoNome() throws Exception {
         JSONObject my_obj = new JSONObject();
 
-        my_obj.put("idEstado", "SC");
+        my_obj.put("uf", "SC");
         my_obj.put("nome", "Joinville");
         my_obj.put("populacao", 590400);
 

@@ -42,7 +42,7 @@ public class DeleteRequestTests {
 
                 JSONObject my_obj = new JSONObject();
 
-                my_obj.put("idEstado", "SC");
+                my_obj.put("uf", "SC");
                 my_obj.put("nome", "Joinville");
                 my_obj.put("populacao", 590400);
 
@@ -63,7 +63,7 @@ public class DeleteRequestTests {
 
                 JSONObject my_obj = new JSONObject();
 
-                my_obj.put("idEstado", "RS");
+                my_obj.put("uf", "RS");
                 my_obj.put("nome", "Farroupilha");
                 my_obj.put("populacao", 72331);
 

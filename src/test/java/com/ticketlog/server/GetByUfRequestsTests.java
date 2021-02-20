@@ -51,7 +51,7 @@ public class GetByUfRequestsTests {
 
         JSONObject my_obj = new JSONObject();
 
-        my_obj.put("idEstado", "SC");
+        my_obj.put("uf", "SC");
         my_obj.put("nome", "Joinville");
         my_obj.put("populacao", 590400);
 
@@ -63,7 +63,7 @@ public class GetByUfRequestsTests {
 
         my_obj = new JSONObject();
 
-        my_obj.put("idEstado", "SC");
+        my_obj.put("uf", "SC");
         my_obj.put("nome", "Florianópolis");
         my_obj.put("populacao", 508826);
 

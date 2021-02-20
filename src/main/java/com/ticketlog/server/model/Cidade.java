@@ -12,13 +12,21 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 
+@JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
 @Entity
-@Table(name = "cidades", uniqueConstraints = { @UniqueConstraint(columnNames = {"idEstado","nome"}, name = "uk_cidade_nome") })
+@Table(name = "cidades", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "idEstado", "nome" }, name = "uk_cidade_nome") })
 public class Cidade {
 
     @Id
@@ -36,10 +44,11 @@ public class Cidade {
     @DecimalMin(value = "0.0")
     private Double custoCidadeUs;
 
+    @JsonProperty("uf")
     @NotNull(message = "Campo não deve ser vazio")
     private UF idEstado;
 
-    public Cidade(){
+    public Cidade() {
         setId(UUID.randomUUID());
         setCustoCidadeUs(0.0);
     }

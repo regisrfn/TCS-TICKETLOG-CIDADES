@@ -1,18 +1,25 @@
 package com.ticketlog.server.service;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.ticketlog.server.dao.CidadeDao;
 import com.ticketlog.server.exception.ApiRequestException;
 import com.ticketlog.server.model.Cidade;
 import com.ticketlog.server.model.Cidade.UF;
 import com.ticketlog.server.model.PCusto;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -24,13 +31,16 @@ public class CidadeService {
     private Dotenv dotenv;
     private String apiCusto;
     private String custoId = "95d1421a-4071-4a9b-b3d3-603865c89097";
+    private FileStorageService storageService;
 
     @Autowired
-    public CidadeService(CidadeDao cidadeDao, RestTemplate restTemplate, Dotenv dotenv) {
+    public CidadeService(CidadeDao cidadeDao, RestTemplate restTemplate, Dotenv dotenv,
+            FileStorageService storageService) {
         this.dotenv = dotenv;
         this.cidadeDao = cidadeDao;
         this.restTemplate = restTemplate;
         this.apiCusto = this.dotenv.get("API_CUSTO_URL");
+        this.storageService = storageService;
     }
 
     public Cidade saveCidade(Cidade cidade) {
@@ -90,6 +100,29 @@ public class CidadeService {
         }
     }
 
+    public List<Cidade> saveCidadesFromFile(MultipartFile file) {
+        String filename, savedFilePath, extFile;
+        extFile = getExtension(file.getOriginalFilename());
+        filename = UUID.randomUUID() + "." + extFile;
+        List<Cidade> cidadesList = new ArrayList<>();
+
+        try {
+            savedFilePath = storageService.save(file, filename);
+            CsvSchema cidadeLineSchema = CsvSchema.emptySchema().withHeader();
+            CsvMapper csvMapper = new CsvMapper();
+            MappingIterator<Cidade> cidadeLines = csvMapper.readerFor(Cidade.class).with(cidadeLineSchema)
+                    .readValues(new File(savedFilePath));
+
+            while (cidadeLines.hasNext())
+                cidadesList.add(saveCidade(cidadeLines.next()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cidadesList;
+    }
+
+    /////////////////////////////////////// PRIVATE METHODS
     private Double calcCusto(Cidade cidade) {
         try {
             PCusto response = restTemplate.getForObject(this.apiCusto + "/get/" + this.custoId, PCusto.class);
@@ -108,6 +141,10 @@ public class CidadeService {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    private String getExtension(String filename) {
+        return FilenameUtils.getExtension(filename);
     }
 
 }
