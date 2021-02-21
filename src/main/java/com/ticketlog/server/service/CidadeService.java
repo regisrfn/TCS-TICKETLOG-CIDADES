@@ -49,8 +49,7 @@ public class CidadeService {
             Double custo = calcCusto(cidade);
             cidade.setCustoCidadeUs(custo);
         } catch (Exception e) {
-            throw new ApiRequestException(e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ApiRequestException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return cidadeDao.saveOrUpdateCidade(cidade);
     }
@@ -131,6 +130,19 @@ public class CidadeService {
         }
 
         return cidadesList;
+    }
+
+    public List<Cidade> deleteListOfCidades(List<Cidade> cidadesList) {
+        List<Cidade> deletedCidades = new ArrayList<>();
+        for (Cidade c : cidadesList) {
+            try {
+                deleteCidadeById(c.getId().toString());
+                deletedCidades.add(c);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return deletedCidades;
     }
 
     /////////////////////////////////////// PRIVATE METHODS

@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -40,8 +39,6 @@ public class Cidade {
     @Min(value = 0, message = "Populacao deve ser maior ou igual a zero")
     private Long populacao;
 
-    @NotNull(message = "Campo não deve ser vazio")
-    @DecimalMin(value = "0.0")
     private Double custoCidadeUs;
 
     @JsonProperty("uf")
@@ -50,7 +47,6 @@ public class Cidade {
 
     public Cidade() {
         setId(UUID.randomUUID());
-        setCustoCidadeUs(0.0);
     }
 
     public void setIdEstado(String id) {
@@ -62,7 +58,12 @@ public class Cidade {
     }
 
     public String getIdEstado() {
-        return this.idEstado.toString();
+        try {
+            return this.idEstado.toString();
+        } catch (Exception e) {
+           return null;
+        }
+        
     }
 
     public enum UF {

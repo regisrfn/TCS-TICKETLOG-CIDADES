@@ -55,16 +55,4 @@ public class CidadeRepository implements CidadeDao {
     public List<Cidade> getByUF(UF uf) {
         return jpaDataAccess.findByIdEstadoOrderByNome(uf);
     }
-
-    @Override
-    public List<Cidade> saveList(List<Cidade> cList) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean deleteCidadeById(List<Cidade> cList) {
-        // TODO Auto-generated method stub
-        return false;
-    }
 }

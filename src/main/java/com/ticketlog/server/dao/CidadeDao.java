@@ -11,11 +11,7 @@ public interface CidadeDao {
 
     boolean deleteCidadeById(UUID id);
 
-    boolean deleteCidadeById(List<Cidade> cList);
-
     List<Cidade> getAll();
-
-    List<Cidade> saveList(List<Cidade> cList);
 
     List<Cidade> getByUF(UF uf);
 

@@ -30,7 +30,7 @@ public class SaveFromFileTests {
 	private ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
 	@Test
-	public void itShouldUploadAFile() throws Exception {
+	public void itShouldSaveCidadesFromFile() throws Exception {
 		MockMultipartFile file = new MockMultipartFile("file", "cidades.csv", "text/csv",
 				new FileInputStream(new File("cidades.csv")));
 
