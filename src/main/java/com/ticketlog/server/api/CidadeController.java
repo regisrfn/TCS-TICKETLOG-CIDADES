@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.ticketlog.server.model.Cidade;
+import com.ticketlog.server.model.PageResponse;
 import com.ticketlog.server.service.CidadeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,15 @@ public class CidadeController {
     @GetMapping("{uf}")
     public List<Cidade> getCidadeByUf(@PathVariable String uf) {
         return cidadeService.getCidadesPorEstado(uf);
+    }
+
+    @GetMapping("{uf}/page")
+    public PageResponse getAllFiles(
+            @PathVariable String uf,
+            @RequestParam(name = "number", defaultValue = "0") int number,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ){
+        return cidadeService.getPage(uf,number, size);
     }
 
     @DeleteMapping("delete/{id}")

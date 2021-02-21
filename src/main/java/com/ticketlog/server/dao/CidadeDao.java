@@ -6,6 +6,8 @@ import java.util.UUID;
 import com.ticketlog.server.model.Cidade;
 import com.ticketlog.server.model.Cidade.UF;
 
+import org.springframework.data.domain.Page;
+
 public interface CidadeDao {
     Cidade saveOrUpdateCidade(Cidade Cidade);
 
@@ -16,4 +18,6 @@ public interface CidadeDao {
     List<Cidade> getByUF(UF uf);
 
     Cidade getCidade(UUID id);
+
+    Page<Cidade> getCidadesPage(UF uf, int pageNumber, int size);
 }

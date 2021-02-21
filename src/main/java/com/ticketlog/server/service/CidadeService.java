@@ -14,6 +14,7 @@ import com.ticketlog.server.exception.ApiRequestException;
 import com.ticketlog.server.model.Cidade;
 import com.ticketlog.server.model.Cidade.UF;
 import com.ticketlog.server.model.PCusto;
+import com.ticketlog.server.model.PageResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +144,18 @@ public class CidadeService {
             }
         }
         return deletedCidades;
+    }
+
+    public PageResponse getPage(String estadoUf, int page, int size) {
+        try {
+            UF uf = UF.valueOf(estadoUf.toUpperCase());
+            return new PageResponse(cidadeDao.getCidadesPage(uf, page, size));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new ApiRequestException("UF não existe", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
+        }
     }
 
     /////////////////////////////////////// PRIVATE METHODS
