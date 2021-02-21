@@ -1,6 +1,7 @@
 package com.ticketlog.server.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,8 +45,13 @@ public class CidadeService {
     }
 
     public Cidade saveCidade(Cidade cidade) {
-        Double custo = calcCusto(cidade);
-        cidade.setCustoCidadeUs(custo);
+        try {
+            Double custo = calcCusto(cidade);
+            cidade.setCustoCidadeUs(custo);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return cidadeDao.saveOrUpdateCidade(cidade);
     }
 
@@ -106,19 +112,24 @@ public class CidadeService {
         filename = UUID.randomUUID() + "." + extFile;
         List<Cidade> cidadesList = new ArrayList<>();
 
+        savedFilePath = storageService.save(file, filename);
+        CsvSchema cidadeLineSchema = CsvSchema.emptySchema().withHeader();
+        CsvMapper csvMapper = new CsvMapper();
+        MappingIterator<Cidade> cidadeLines;
         try {
-            savedFilePath = storageService.save(file, filename);
-            CsvSchema cidadeLineSchema = CsvSchema.emptySchema().withHeader();
-            CsvMapper csvMapper = new CsvMapper();
-            MappingIterator<Cidade> cidadeLines = csvMapper.readerFor(Cidade.class).with(cidadeLineSchema)
-                    .readValues(new File(savedFilePath));
-
-            while (cidadeLines.hasNext())
-                cidadesList.add(saveCidade(cidadeLines.next()));
-
-        } catch (Exception e) {
+            cidadeLines = csvMapper.readerFor(Cidade.class).with(cidadeLineSchema).readValues(new File(savedFilePath));
+            while (cidadeLines.hasNext()) {
+                try {
+                    cidadesList.add(saveCidade(cidadeLines.next()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
             e.printStackTrace();
+            throw new ApiRequestException("Erro na leitura do arquivo");
         }
+
         return cidadesList;
     }
 
@@ -137,8 +148,7 @@ public class CidadeService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiRequestException("Não foi possivel obter os parametros de custo",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Não foi possivel obter os parametros de custo");
         }
 
     }
