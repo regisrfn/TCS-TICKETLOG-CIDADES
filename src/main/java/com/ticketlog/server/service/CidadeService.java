@@ -113,7 +113,7 @@ public class CidadeService {
         List<Cidade> cidadesList = new ArrayList<>();
 
         savedFilePath = storageService.save(file, filename);
-        CsvSchema cidadeLineSchema = CsvSchema.emptySchema().withHeader();
+        CsvSchema cidadeLineSchema = CsvSchema.emptySchema().withColumnSeparator(';').withHeader();
         CsvMapper csvMapper = new CsvMapper();
         MappingIterator<Cidade> cidadeLines;
         try {
