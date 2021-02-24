@@ -35,8 +35,8 @@ public class Cidade {
     @Column(nullable = false)
     private String nome;
 
-    @NotNull(message = "Campo não deve ser vazio")
-    @Min(value = 0, message = "Populacao deve ser maior ou igual a zero")
+    @NotNull(message = "Valor de população invalido")
+    @Min(value = 0, message = "Valor de população invalido")
     private Long populacao;
 
     private Double custoCidadeUs;
@@ -47,6 +47,14 @@ public class Cidade {
 
     public Cidade() {
         setId(UUID.randomUUID());
+    }
+
+    public void setPopulacao(String populacao){
+        try {
+            this.populacao = Long.parseLong(populacao);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setIdEstado(String id) {

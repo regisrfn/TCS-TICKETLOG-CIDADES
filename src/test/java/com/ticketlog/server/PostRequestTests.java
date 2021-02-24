@@ -74,7 +74,7 @@ public class PostRequestTests {
     }
 
     @Test
-    void itShouldSaveCidade_mesmoNome() throws Exception {
+    void itShouldNotSaveCidade_mesmoNome() throws Exception {
         JSONObject my_obj = new JSONObject();
 
         my_obj.put("uf", "SC");
@@ -86,6 +86,20 @@ public class PostRequestTests {
 
         mockMvc.perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errors.nome", Is.is("Nome da cidade ja existe no estado")))
+                .andExpect(status().isBadRequest()).andReturn();
+
+    }
+
+    @Test
+    void itShouldNotSaveCidade_populacaoInvalida() throws Exception {
+        JSONObject my_obj = new JSONObject();
+
+        my_obj.put("uf", "SC");
+        my_obj.put("nome", "Joinville");
+        my_obj.put("populacao", "abs");
+
+        mockMvc.perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.populacao", Is.is("Valor de população invalido")))
                 .andExpect(status().isBadRequest()).andReturn();
 
     }
