@@ -48,6 +48,7 @@ public class CidadeService {
     public Cidade saveCidade(Cidade cidade) {
         try {
             Double custo = calcCusto(cidade);
+            cidade.setNome(cidade.getNome().toLowerCase());
             cidade.setCustoCidadeUs(custo);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -129,6 +130,9 @@ public class CidadeService {
             e.printStackTrace();
             throw new ApiRequestException("Erro na leitura do arquivo");
         }
+
+        if (cidadesList.size() == 0)
+            throw new ApiRequestException("Nenhuma cidade foi salva", HttpStatus.INTERNAL_SERVER_ERROR);
 
         return cidadesList;
     }
