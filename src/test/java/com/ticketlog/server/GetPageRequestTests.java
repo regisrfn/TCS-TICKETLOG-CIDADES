@@ -72,4 +72,43 @@ public class GetPageRequestTests {
         assertThat(pageResponse.getTotalPages()).isEqualTo(2);
         assertThat(pageResponse.getPageNumber()).isEqualTo(1);
     }
+
+    @Test
+    void itShouldGetCidadesPage_orderByPopulacao() throws Exception {
+        MvcResult result = mockMvc.perform(get("/api/v1/cidade/sc/page")).andExpect(status().isOk()).andReturn();
+
+        PageResponse pageResponse = (objectMapper.readValue(result.getResponse().getContentAsString(),
+                PageResponse.class));
+
+        assertThat(pageResponse.getCidadesList().size()).isEqualTo(0);
+
+        JSONObject my_obj = new JSONObject();
+
+        my_obj.put("uf", "SC");
+        my_obj.put("nome", "Joinville");
+        my_obj.put("populacao", 590400);
+
+        mockMvc.perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(status().isOk()).andReturn();
+
+        my_obj = new JSONObject();
+
+        my_obj.put("uf", "SC");
+        my_obj.put("nome", "Florianópolis");
+        my_obj.put("populacao", 508826);
+
+        mockMvc.perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(status().isOk()).andReturn();
+
+        result = mockMvc.perform(get("/api/v1/cidade/sc/page?number=0&size=2&sort=populacao&asc=false")).andExpect(status().isOk()).andReturn();
+
+        pageResponse = (objectMapper.readValue(result.getResponse().getContentAsString(), PageResponse.class));
+
+        assertThat(pageResponse.getCidadesList().size()).isEqualTo(2);
+        assertThat(pageResponse.getTotalPages()).isEqualTo(1);
+        assertThat(pageResponse.getPageNumber()).isEqualTo(0);
+        assertThat(pageResponse.getCidadesList().get(0).getPopulacao()).isEqualTo(590400);
+        assertThat(pageResponse.getCidadesList().get(1).getPopulacao()).isEqualTo(508826);
+
+    }
 }

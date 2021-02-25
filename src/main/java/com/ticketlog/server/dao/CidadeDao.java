@@ -19,5 +19,6 @@ public interface CidadeDao {
 
     Cidade getCidade(UUID id);
 
-    Page<Cidade> getCidadesPage(UF uf, int pageNumber, int size);
+    Page<Cidade> getCidadesPage(UF uf, String orderBy, boolean asc, int pageNumber, int size);
+
 }

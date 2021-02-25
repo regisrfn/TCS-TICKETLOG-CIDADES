@@ -150,10 +150,10 @@ public class CidadeService {
         return deletedCidades;
     }
 
-    public PageResponse getPage(String estadoUf, int page, int size) {
+    public PageResponse getPage(String estadoUf, String orderBy, boolean asc, int page, int size) {
         try {
             UF uf = UF.valueOf(estadoUf.toUpperCase());
-            return new PageResponse(cidadeDao.getCidadesPage(uf, page, size));
+            return new PageResponse(cidadeDao.getCidadesPage(uf, orderBy, asc, page, size));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             throw new ApiRequestException("UF não existe", HttpStatus.BAD_REQUEST);

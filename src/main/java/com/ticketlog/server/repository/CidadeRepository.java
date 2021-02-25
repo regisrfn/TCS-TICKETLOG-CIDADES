@@ -59,8 +59,12 @@ public class CidadeRepository implements CidadeDao {
     }
 
     @Override
-    public Page<Cidade> getCidadesPage(UF uf, int pageNumber, int size) {
-        Sort sort = Sort.by("nome").ascending();
+    public Page<Cidade> getCidadesPage(UF uf, String orderBy, boolean asc, int pageNumber, int size) {
+        Sort sort;
+        if (asc)
+            sort = Sort.by(orderBy).ascending();
+        else
+            sort = Sort.by(orderBy).descending();
         PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
         return jpaDataAccess.findByIdEstado(uf, pageRequest);
     }

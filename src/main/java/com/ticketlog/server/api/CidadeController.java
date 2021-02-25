@@ -66,10 +66,12 @@ public class CidadeController {
     @GetMapping("{uf}/page")
     public PageResponse getAllFiles(
             @PathVariable String uf,
+            @RequestParam(name = "sort", defaultValue = "nome") String orderBy,
+            @RequestParam(name = "asc", defaultValue = "true") boolean asc,
             @RequestParam(name = "number", defaultValue = "0") int number,
             @RequestParam(name = "size", defaultValue = "10") int size
     ){
-        return cidadeService.getPage(uf,number, size);
+        return cidadeService.getPage(uf,orderBy,asc,number, size);
     }
 
     @DeleteMapping("delete/{id}")
