@@ -52,7 +52,7 @@ public class SaveFromFileTests {
 
 		List<Cidade> cidadeList = Arrays
 				.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Cidade[].class));
-		assertThat(cidadeList.size()).isEqualTo(4);
+		assertThat(cidadeList.size()).isEqualTo(10);
 
 	}
 
@@ -66,7 +66,7 @@ public class SaveFromFileTests {
 
 		List<Cidade> cidadeList = Arrays
 				.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Cidade[].class));
-		assertThat(cidadeList.size()).isEqualTo(4);
+		assertThat(cidadeList.size()).isEqualTo(10);
 
 		result = mockMvc.perform(multipart("/api/v1/cidade/savelist").file(file))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errors.apiError", Is.is("Nenhuma cidade foi salva")))
