@@ -17,6 +17,8 @@ public interface CidadeDao {
 
     List<Cidade> getByUF(UF uf);
 
+    List<Cidade> getByNome(String nome);
+
     Cidade getCidade(UUID id);
 
     Page<Cidade> getCidadesPage(UF uf, String orderBy, boolean asc, int pageNumber, int size);

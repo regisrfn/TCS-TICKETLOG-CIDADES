@@ -68,4 +68,10 @@ public class CidadeRepository implements CidadeDao {
         PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
         return jpaDataAccess.findByIdEstado(uf, pageRequest);
     }
+
+    @Override
+    public List<Cidade> getByNome(String nome) {
+        Sort sort = Sort.by("idEstado").ascending();
+        return jpaDataAccess.findByNome(nome, sort);
+    }
 }

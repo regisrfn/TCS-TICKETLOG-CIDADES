@@ -20,6 +20,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -159,6 +160,18 @@ public class CidadeService {
             throw new ApiRequestException("UF não existe", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage());
+        }
+    }
+
+    public List<Cidade> getCidadesByNome(String nome) {
+        try {
+            if (!StringUtils.hasText(nome))
+                throw new ApiRequestException("Nome invalido", HttpStatus.BAD_REQUEST);
+            return cidadeDao.getByNome(nome.toLowerCase());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiRequestException("Listagem das cidades não pode ser efetuada",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

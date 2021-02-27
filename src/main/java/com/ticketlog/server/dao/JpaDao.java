@@ -8,11 +8,12 @@ import com.ticketlog.server.model.Cidade.UF;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaDao extends JpaRepository<Cidade, UUID> {
     List<Cidade> findByIdEstadoOrderByNome(UF uf);
-
+    List<Cidade> findByNome(String nome, Sort sort);
     Page<Cidade> findByIdEstado(UF uf, Pageable pageable);
 
 }

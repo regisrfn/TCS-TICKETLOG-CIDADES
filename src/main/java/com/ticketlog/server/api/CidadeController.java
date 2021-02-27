@@ -53,6 +53,11 @@ public class CidadeController {
         return cidadeService.getAllCidades();
     }
 
+    @GetMapping("search")
+    public List<Cidade> searchCidade(@RequestParam(name = "nome") String nome){
+        return cidadeService.getCidadesByNome(nome);
+    }
+
     @GetMapping("get/{id}")
     public Cidade getCidadeById(@PathVariable String id) {
         return cidadeService.getCidadeById(id);
@@ -73,6 +78,8 @@ public class CidadeController {
     ){
         return cidadeService.getPage(uf,orderBy,asc,number, size);
     }
+
+
 
     @DeleteMapping("delete/{id}")
     public Map<String, String> deleteCidadeById(@PathVariable String id) {
