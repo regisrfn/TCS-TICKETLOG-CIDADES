@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaDao extends JpaRepository<Cidade, UUID> {
     List<Cidade> findByIdEstadoOrderByNome(UF uf);
-    List<Cidade> findByNome(String nome, Sort sort);
+    List<Cidade> findByNomeContains(String nome, Sort sort);
     Page<Cidade> findByIdEstado(UF uf, Pageable pageable);
 
 }
