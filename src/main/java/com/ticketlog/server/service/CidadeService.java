@@ -17,10 +17,10 @@ import com.ticketlog.server.model.PCusto;
 import com.ticketlog.server.model.PageResponse;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,7 +49,9 @@ public class CidadeService {
     public Cidade saveCidade(Cidade cidade) {
         try {
             Double custo = calcCusto(cidade);
-            cidade.setNome(cidade.getNome().toLowerCase());
+            String nomeFiltered = cidade.getNome().toLowerCase();
+            nomeFiltered = StringUtils.normalizeSpace(nomeFiltered);
+            cidade.setNome(nomeFiltered);
             cidade.setCustoCidadeUs(custo);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -165,7 +167,7 @@ public class CidadeService {
 
     public List<Cidade> getCidadesByNome(String nome) {
         try {
-            if (!StringUtils.hasText(nome))
+            if (!StringUtils.isNotBlank(nome))
                 throw new ApiRequestException("Nome invalido", HttpStatus.BAD_REQUEST);
             return cidadeDao.getByNome(nome.toLowerCase());
         } catch (Exception e) {

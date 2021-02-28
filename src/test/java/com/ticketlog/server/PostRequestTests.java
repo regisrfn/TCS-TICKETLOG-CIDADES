@@ -73,6 +73,42 @@ public class PostRequestTests {
         assertThat(response.getCustoCidadeUs()).isEqualTo(64.6792E6, within(100.0));
     }
 
+
+    @Test
+    void itShouldSaveCidade_withExtraSpaces() throws Exception {
+        JSONObject my_obj = new JSONObject();
+
+        my_obj.put("uf", "SC");
+        my_obj.put("nome", "JoinviLle   ");
+        my_obj.put("populacao", 590400);
+
+        MvcResult result = mockMvc
+                .perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(status().isOk()).andReturn();
+
+        Cidade response = objectMapper.readValue(result.getResponse().getContentAsString(), Cidade.class);
+        assertThat(response.getNome()).isEqualTo("joinville");
+        assertThat(response.getPopulacao()).isEqualTo(590400);
+        assertThat(response.getIdEstado().toString()).isEqualTo("SC");
+        assertThat(response.getCustoCidadeUs()).isEqualTo(64.6792E6, within(100.0));
+
+        my_obj = new JSONObject();
+
+        my_obj.put("uf", "PR");
+        my_obj.put("nome", "Sao Jose     dos Pinhais");
+        my_obj.put("populacao", 590400);
+
+        result = mockMvc
+                .perform(post("/api/v1/cidade/save").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(status().isOk()).andReturn();
+
+        response = objectMapper.readValue(result.getResponse().getContentAsString(), Cidade.class);
+        assertThat(response.getNome()).isEqualTo("sao jose dos pinhais");
+        assertThat(response.getPopulacao()).isEqualTo(590400);
+        assertThat(response.getIdEstado().toString()).isEqualTo("PR");
+        assertThat(response.getCustoCidadeUs()).isEqualTo(64.6792E6, within(100.0));
+    }
+
     @Test
     void itShouldNotSaveCidade_mesmoNome() throws Exception {
         JSONObject my_obj = new JSONObject();
