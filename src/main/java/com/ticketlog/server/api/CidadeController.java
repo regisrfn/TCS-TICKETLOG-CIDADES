@@ -54,9 +54,10 @@ public class CidadeController {
     }
 
     @GetMapping("search")
-    public List<Cidade> searchCidade(@RequestParam(name = "nome") String nome){
+    public List<Cidade> searchCidade(@RequestParam(name = "nome") String nome) {
         return cidadeService.getCidadesByNome(nome);
     }
+    
 
     @GetMapping("get/{id}")
     public Cidade getCidadeById(@PathVariable String id) {
@@ -68,17 +69,19 @@ public class CidadeController {
         return cidadeService.getCidadesPorEstado(uf);
     }
 
+    @GetMapping("{uf}/search")
+    public List<Cidade> searchCidadeFromEstado(@PathVariable String uf, @RequestParam(name = "nome") String nome) {
+        return cidadeService.getCidadesByNome(uf, nome);
+    }
+
     @GetMapping("{uf}/page")
-    public PageResponse getAllFiles(
-            @PathVariable String uf,
+    public PageResponse getAllFiles(@PathVariable String uf,
             @RequestParam(name = "sort", defaultValue = "nome") String orderBy,
             @RequestParam(name = "asc", defaultValue = "true") boolean asc,
             @RequestParam(name = "number", defaultValue = "0") int number,
-            @RequestParam(name = "size", defaultValue = "10") int size
-    ){
-        return cidadeService.getPage(uf,orderBy,asc,number, size);
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        return cidadeService.getPage(uf, orderBy, asc, number, size);
     }
-
 
 
     @DeleteMapping("delete/{id}")

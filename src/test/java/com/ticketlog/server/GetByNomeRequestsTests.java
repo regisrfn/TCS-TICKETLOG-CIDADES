@@ -67,4 +67,20 @@ public class GetByNomeRequestsTests {
         assertThat(cidadeList.size()).isEqualTo(2);
 
     }
+
+    @Test
+    public void itShouldGetCidadesByNome_porEstado() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "cidades.csv", "text/csv",
+                new FileInputStream(new File("cidades.csv")));
+
+        mockMvc.perform(multipart("/api/v1/cidade/savelist").file(file)).andExpect(status().isOk()).andReturn();
+
+        MvcResult result = mockMvc.perform(get("/api/v1/cidade/pr/search?nome=procopio")).andExpect(status().isOk())
+                .andReturn();
+
+        List<Cidade> cidadeList = Arrays
+                .asList(objectMapper.readValue(result.getResponse().getContentAsString(), Cidade[].class));
+        assertThat(cidadeList.size()).isEqualTo(1);
+
+    }
 }

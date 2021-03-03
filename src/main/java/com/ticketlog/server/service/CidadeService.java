@@ -177,6 +177,22 @@ public class CidadeService {
         }
     }
 
+    public List<Cidade> getCidadesByNome(String estadoUf, String nome) {
+        try {
+            if (!StringUtils.isNotBlank(nome) && StringUtils.isNotBlank(estadoUf))
+                throw new ApiRequestException("Requisição invalida", HttpStatus.BAD_REQUEST);
+            UF uf = UF.valueOf(estadoUf.toUpperCase());
+            return cidadeDao.getCidadesList(uf, nome);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new ApiRequestException("UF não existe", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiRequestException("Listagem das cidades não pode ser efetuada",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     /////////////////////////////////////// PRIVATE METHODS
     private Double calcCusto(Cidade cidade) {
         try {

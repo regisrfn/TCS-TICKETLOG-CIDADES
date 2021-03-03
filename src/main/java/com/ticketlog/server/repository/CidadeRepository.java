@@ -71,7 +71,13 @@ public class CidadeRepository implements CidadeDao {
 
     @Override
     public List<Cidade> getByNome(String nome) {
-        Sort sort = Sort.by("nome","populacao").ascending();
+        Sort sort = Sort.by("nome", "populacao").ascending();
         return jpaDataAccess.findByNomeContains(nome, sort);
+    }
+
+    @Override
+    public List<Cidade> getCidadesList(UF uf, String nome) {
+        Sort sort = Sort.by("nome").ascending();
+        return jpaDataAccess.findByIdEstadoAndNomeContains(uf, nome, sort);
     }
 }
